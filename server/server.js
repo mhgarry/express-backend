@@ -1,17 +1,23 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
+const db = require('./db/connection');
+const dbConnect = require('./db/connection');
+const app = express();
+
 require('dotenv').config;
 
-const PORT = 3700;
+const PORT = process.env.PORT || 3700;
 
 app.use(express.json());
 app.use(cors());
+
 
 app.get('/', (req, res) => {
     res.json('this is a test')
 })
 
-app.listen(PORT, () => {
-    console.log(`Server connceted on port ${PORT}`);
-});
+dbConnect.once('open', () => { 
+    app.listen(PORT, () => {
+      console.log(`Server is up and running on Port: http://localhost:${PORT}`);
+    });
+  });
