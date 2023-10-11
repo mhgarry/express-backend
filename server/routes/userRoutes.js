@@ -14,11 +14,14 @@ router.post('/register', async(req, res) => {
         // await email and password to create user
         await Users.create({
             email: req.body.email,
-            password: password,
+            password: password, 
         })
-        res.json({ success: true, message: `New user ${req.body.email} created!`})
+        res.status(200).json({ success: true,  message: `New user ${req.body.email} created!`});
+        console.log('New user created!')
+
+        console.log(token)
     } catch(err) {
-        res.json({ success: false, error: err})
+        res.status(500)
     }
 });
 
