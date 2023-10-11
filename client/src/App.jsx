@@ -1,11 +1,14 @@
 
+import { Switch, BrowserRouter as Router, Route } from 'react-router-dom';
+
 const App = () => {
-  return (
-    <>
-      <h1>Auth Test Frotnend</h1>
-      <p>Concurrently test</p>
-    </>
-  )
+  <Router>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path='/register' component={Register} />
+    </Switch>
+  </Router>
 }
 
 export default App;
