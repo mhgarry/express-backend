@@ -6,9 +6,9 @@ const app = express();
 app.use(express.json());
 const corsOptions = {
   origin: 'http://localhost:5173',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE', 'OPTION'],
   credentials: true,
-  optionsSuccessStatus: 200,
+  optionsSuccessStatus: 204,
 }; // set my cors options to allow my client to connect to my server
 app.use(cors(corsOptions));
 require("dotenv").config;
