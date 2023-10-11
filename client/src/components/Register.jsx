@@ -1,25 +1,34 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
         const user = {
             email,
-            password,
-        };
-        console.log(user);
+            password
+        }; // create user object
+        console.log(user)
+        // fetch to register router on server
+        try {
+            const res = await fetch('http://localhost:3700/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+            
+            if (!res.ok) {
+                throw new Error('Error in fetch to register router');
+            }
 
-        fetch('http://localhost:3700/api/register', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: user,
-        }).then(() => {
-            console.log('new user added');
-        });
-    };
+            console.log('User was registered successfully');
+        } catch(err) {
+            console.error(err);
+        }
+    }
 
     return (
         <div>
