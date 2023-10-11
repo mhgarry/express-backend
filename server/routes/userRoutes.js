@@ -1,12 +1,12 @@
-const { Users } = require('../models/User');
+const { User } = require('../models/User');
 const { hashPass } = require('../middleware/hashPassword');
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 // Create a secret key for JWT
-const secret = process.env.JWT_SECRET || require('crypto').randomBytes(256).toString('hex');
-process.env.JWT_SECRET = secret;
+const dev_secret = process.env.JWT_SECRET || require('crypto').randomBytes(256).toString('hex');
+process.env.JWT_SECRET = dev_secret;
 
 // User registration post
 router.post('/register', async (req, res) => {
@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
         const password = await hashPass(req, res);
 
         // Await email and password to create user
-        await Users.create({
+        await User.create({
             email: req.body.email,
             password: password,
         });
@@ -30,7 +30,11 @@ router.post('/register', async (req, res) => {
         res.status(200).json({ success: true, message: `New user ${req.body.email} created!`, token });
         console.log('New user created!');
     } catch (err) {
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        if (err.code === 11000) {
+            return res.status(400).json({ success: false, message: 'Email already exists' });
+        }
+        return res.status(500).json({ success: false, message: 'Internal server' });
     }
+    
 });
 module.exports = router;
